@@ -1,0 +1,20 @@
+{
+  "name": "charity-api",
+  "version": "1.0.0",
+  "description": "Simple Backend for a charity",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Lenard Pratt",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "eslint": "^3.15.0",
+    "express": "^4.14.1",
+    "mongoose": "^4.8.1"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
+}
