@@ -6,11 +6,15 @@ const express = require('express');
 
 const app = express();
 
-const bodyParser = require('body-parser');
+
 
 // const mongoose = require('mongoose');
 
 //  mongoose.connect('mongodb://localhost/website');
+
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/website');
 
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -20,17 +24,22 @@ const port = process.env.PORT || 3000;
 
 // ROUTES FOR OUR API
 // ============================================
+
+
+
+
 const router = express.Router();
 
-router.get('/', (req,res)=>{
-    res.json({
-        message:"request hit",
+const posts= require('./routes/posts.js');
+const imgs = require('./routes/imgs.js');
+// app.use((req,res,next)=>{
+//         console.log('Something is happening')
+//         next()
+//     })
 
-    })
-})
+app.use('/api', posts,imgs);
 
-
-app.use('/api', router);
+// require('./routes/routes.js')(app)
 
 app.listen(port);
 

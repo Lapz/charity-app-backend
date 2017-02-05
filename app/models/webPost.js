@@ -8,10 +8,8 @@ const webPostSchema = new Schema({
     author:String,
     publishedDate: [Date],
     editedDate:[Date]
-
-    
 })
 
-const webPost = mongoose.model('webPost',webPostSchema)
+const webPost = mongoose.model("webPost",webPostSchema)
 
 module.exports = webPost
