@@ -4,7 +4,8 @@
   "description": "Simple Backend for a charity",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start":"nodemon ./app/index.js"
   },
   "author": "Lenard Pratt",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "mongoose": "^4.8.1"
   },
   "devDependencies": {
-    "jest": "^18.1.0"
+    "jest": "^18.1.0",
+    "nodemon": "^1.11.0"
   }
 }
