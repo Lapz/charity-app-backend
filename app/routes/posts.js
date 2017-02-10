@@ -53,7 +53,11 @@ router
             if (err) 
                 res.send(err)
 
+            console.log(req.body)
+
             post.title = req.body.title // updates the title
+
+            post.body = req.body.textBody
 
             post.save((err) => {
                 if (err) 
