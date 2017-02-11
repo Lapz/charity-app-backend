@@ -10,10 +10,6 @@ const router = express.Router();
 const Account = require("../models/account");
 
 const Post = new webPost()
-router.use((req, res, next) => {
-    console.log('Something is happening')
-    next()
-})
 
 router.get('/', (req, res) => {
     res.json({message: 'horray! welcome to our api'})

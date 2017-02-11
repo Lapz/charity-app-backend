@@ -11,11 +11,6 @@ const router = express.Router()
 
 const User = new Account()
 
-router.use((req, res, next) => {
-    console.log("Something is happpening")
-    next()
-})
-
 router
     .route("/users")
     .get((req, res) => {
@@ -28,7 +23,7 @@ router
     })
 
 router
-    .route("/setup")
+    .route("/signup")
     .post((req, res) => {
 
         Account.register(new Account({username: req.body.username, admin: "true"}), req.body.password, (err, account) => {
@@ -47,7 +42,7 @@ router
 
         console.log(req.body)
 
-        res.send({message: "Logged in"})
+        res.send({message: "Logged in", cookie: req.session})
     })
 
 router
