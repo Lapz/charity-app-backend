@@ -79,3 +79,5 @@ app.use("/api", ensureAuthed, posts, imgs)
 app.listen(port);
 
 console.log('Magic happens on port ' + port);
+
+"ASDFSAfsda"
