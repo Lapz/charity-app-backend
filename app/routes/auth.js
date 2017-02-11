@@ -1,13 +1,15 @@
-const user = require("../models/user");
-const jwt = require('jsonwebtoken');
+const Account = require("../models/account");
+
+const passport = require('passport');
+
 const express = require('express');
-const config = require('../config')
+
 const app = express()
 
-app.set('superSecret', config.secret)
+// app.set('superSecret', config.secret)
 const router = express.Router()
 
-const User = new user()
+const User = new Account()
 
 router.use((req, res, next) => {
     console.log("Something is happpening")
@@ -17,7 +19,7 @@ router.use((req, res, next) => {
 router
     .route("/users")
     .get((req, res) => {
-        user.find((err, users) => {
+        Account.find((err, users) => {
             if (err) 
                 res.send(err)
 
@@ -28,42 +30,30 @@ router
 router
     .route("/setup")
     .post((req, res) => {
-        const admin = new user({userName: "admin", password: "admin", admin: "true"});
 
-        admin.save((err) => {
+        Account.register(new Account({username: req.body.username, admin: "true"}), req.body.password, (err, account) => {
             if (err) 
-                res.send(err)
+                res.json({info: "That username exists already. Try again"})
 
-            res.json({message: "User made", success: true})
+            passport.authenticate('local')(req, res, () => {
+                res.json({sucess: true, message: "Account Created"})
+            })
         })
     })
 
 router
     .route("/authenticate")
-    .post((req, res) => {
+    .post(passport.authenticate('local'), (req, res) => {
 
         console.log(req.body)
-        user.findOne({
-            userName: req.body.userName
-        }, (err, user) => {
-            if (err) 
-                res.send(err)
 
-            if (!user) {
-                res.json({success: false, message: 'Authentication failed. User not found.'});
-            } else if (user) {
-                if (user.password != req.body.password) {
-                    res.json({success: false, message: 'Authentication failed. Wrong password.'})
-                } else {
-                    const token = jwt.sign(user, app.get('superSecret'), {
-                        expiresIn: 1440 // expires in 24 hours
-                    });
-
-                    res.json({success: true, message: 'Enjoy your token!', token: token});
-                }
-            }
-
-        })
+        res.send({message: "Logged in"})
     })
 
+router
+    .route("/logout")
+    .get((req, res) => {
+        req.logout()
+        res.json({message: "Logged out"})
+    })
 module.exports = router

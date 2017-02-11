@@ -3,8 +3,11 @@
 
 const webPost = require('../models/webPost.js');
 
+const passport = require("passport");
 const express = require('express');
 const router = express.Router();
+
+const Account = require("../models/account");
 
 const Post = new webPost()
 router.use((req, res, next) => {
