@@ -1,6 +1,6 @@
 const jwt = require('jwt-simple');
 const Account = require("../models/account.js");
-const secret = "blue"
+
 const passport = require("passport")
 /**
  *  The Auth Checker middleware function.
@@ -28,7 +28,7 @@ module.exports = (req, res, next) => {
         const token = getToken(req.headers)
 
         if (token) {
-            const decoded = jwt.decode(token, secret);
+            const decoded = jwt.decode(token, process.env.JWT_SECRET);
 
             Account.findOne({
                 username: decoded.username

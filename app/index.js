@@ -1,4 +1,6 @@
 // Basic Setup ===================================
+
+require("dotenv").config()
 const mongoose = require('mongoose');
 const express = require('express');
 const session = require("express-session");
@@ -6,14 +8,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cookieparser = require("cookie-parser");
-const secret = "blue"
 const jwtStrategy = require("passport-jwt").Strategy;
 ExtractJwt = require("passport-jwt").ExtractJwt;
 const checkAuth = require("./middleware/checkAuth")
 
 // MONGOOSE ========
 mongoose.Promise = global.Promise;
-
+console.log(process.env.JWT_SECRET)
 mongoose.connect('mongodb://localhost/website');
 
 const Account = require("./models/account");
@@ -30,7 +31,7 @@ const localsignup = require("./passport/local-signup");
 
 const opts = {}
 
-opts.secretOrKey = secret;
+opts.secretOrKey = process.env.JWT_SECRET;
 opts.jwtFromRequest = ExtractJwt.fromAuthHeader()
 passport.use(new jwtStrategy(opts, (jwtPayload, done) => {
   Account.findOne({

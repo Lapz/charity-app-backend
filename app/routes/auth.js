@@ -6,10 +6,8 @@ const express = require('express');
 
 const app = express()
 const jwt = require("jwt-simple")
-// app.set('superSecret', config.secret)
-const router = express.Router()
 
-const secret = "blue"
+const router = express.Router()
 
 const User = new Account()
 
@@ -41,11 +39,6 @@ router
             })
         }
 
-        // Account.register(new Account({username: req.body.username, admin: "true"}),
-        // req.body.password, (err, account) => {     if (err)         res.json({info:
-        // "That username exists already. Try again"})
-        // passport.authenticate('local')(req, res, () => {         res.json({sucess:
-        // true, message: "Account Created"})     }) })
     })
 
 router
@@ -63,7 +56,7 @@ router
                 console.log(req.body.password)
                 user.comparePassword(req.body.password, (err, isMatch) => {
                     if (isMatch && !err) {
-                        const token = jwt.encode(user, secret)
+                        const token = jwt.encode(user, process.env.JWT_SECRET)
 
                         res.json({
                             success: true,
