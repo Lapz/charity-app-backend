@@ -5,9 +5,11 @@ const passport = require('passport');
 const express = require('express');
 
 const app = express()
-
+const jwt = require("jwt-simple")
 // app.set('superSecret', config.secret)
 const router = express.Router()
+
+const secret = "blue"
 
 const User = new Account()
 
@@ -25,24 +27,56 @@ router
 router
     .route("/signup")
     .post((req, res) => {
+        if (!req.body.username || !req.body.password) {
+            res.json({sucess: false, msg: "Enter a password or email"})
+        } else {
+            const newUser = new Account({username: req.body.username, password: req.body.password})
 
-        Account.register(new Account({username: req.body.username, admin: "true"}), req.body.password, (err, account) => {
-            if (err) 
-                res.json({info: "That username exists already. Try again"})
+            newUser.save((err) => {
+                if (err) {
+                    return res.json({success: false, msg: "Username already exists"})
+                }
 
-            passport.authenticate('local')(req, res, () => {
-                res.json({sucess: true, message: "Account Created"})
+                res.json({success: true, msg: "New user made"})
             })
-        })
+        }
+
+        // Account.register(new Account({username: req.body.username, admin: "true"}),
+        // req.body.password, (err, account) => {     if (err)         res.json({info:
+        // "That username exists already. Try again"})
+        // passport.authenticate('local')(req, res, () => {         res.json({sucess:
+        // true, message: "Account Created"})     }) })
     })
 
 router
     .route("/authenticate")
-    .post(passport.authenticate('local'), (req, res) => {
+    .post((req, res) => {
+        Account.findOne({
+            username: req.body.username
+        }, (err, user) => {
+            if (err) 
+                res.send(err)
 
-        console.log(req.body)
+            if (!user) {
+                res.send({success: false, msg: "authentication faild. User not found"})
+            } else {
+                console.log(req.body.password)
+                user.comparePassword(req.body.password, (err, isMatch) => {
+                    if (isMatch && !err) {
+                        const token = jwt.encode(user, secret)
 
-        res.send({message: "Logged in", cookie: req.session})
+                        res.json({
+                            success: true,
+                            token: "JWT " + token
+                        })
+                    } else {
+                        res.send({success: false, msg: 'Authentication failed. Wrong password.'})
+                    }
+                })
+            }
+        })
+
+        // res.send({message: "Logged in", success: true, token})
     })
 
 router
