@@ -28,7 +28,12 @@ module.exports = (req, res, next) => {
         const token = getToken(req.headers)
 
         if (token) {
-            const decoded = jwt.decode(token, process.env.JWT_SECRET);
+            let decoded
+            try {
+                decoded = jwt.decode(token, process.env.JWT_SECRET);
+            } catch (err) {
+                return next(err)
+            }
 
             Account.findOne({
                 username: decoded.username

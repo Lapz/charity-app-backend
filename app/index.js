@@ -3,15 +3,14 @@
 require("dotenv").config()
 const mongoose = require('mongoose');
 const express = require('express');
-const session = require("express-session");
 const app = express();
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cookieparser = require("cookie-parser");
 const jwtStrategy = require("passport-jwt").Strategy;
 ExtractJwt = require("passport-jwt").ExtractJwt;
-const checkAuth = require("./middleware/checkAuth")
-
+const checkAuth = require("./middleware/checkAuth");
+const morgan = require("morgan")
 // MONGOOSE ========
 mongoose.Promise = global.Promise;
 console.log(process.env.JWT_SECRET)
@@ -20,14 +19,12 @@ mongoose.connect('mongodb://localhost/website');
 const Account = require("./models/account");
 
 // Config for middleware
-
+app.use(morgan("dev"))
 app.use(cookieparser())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// Passport config
-const localsignin = require("./passport/local-signin");
-const localsignup = require("./passport/local-signup");
+// ============== Passport config ============
 
 const opts = {}
 
@@ -49,10 +46,10 @@ passport.use(new jwtStrategy(opts, (jwtPayload, done) => {
   })
 }))
 
-//=============================
-
 app.use(passport.initialize());
 app.use(passport.session());
+
+//============================= Server Setup =============================
 
 const port = process.env.PORT || 3001;
 
@@ -69,11 +66,25 @@ app.use(function (req, res, next) {
 const posts = require('./routes/posts.js');
 const imgs = require('./routes/imgs.js');
 const auth = require("./routes/auth.js");
+
 app.use("/api", checkAuth, posts, imgs)
 app.use('/auth', auth)
+
+// 404: Not found
+app.use(function (req, res, next) {
+  res
+    .status(404)
+    .json({ERROR: 'Page not found.'});
+});
+
+// 500: Error reporing
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res
+    .status(500)
+    .json({ERROR: 'Internal server error.'});
+});
 
 app.listen(port);
 
 console.log('Magic happens on port ' + port);
-
-"ASDFSAfsda"
