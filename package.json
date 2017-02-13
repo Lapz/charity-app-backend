@@ -6,9 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon ./app/index.js",
-    "lint": "eslint ./app --fix",
-    "prepush":"yarn test",
-    "precommit": "yarn lint"
+    "lint": "eslint ./app --fix"
   },
   "author": "Lenard Pratt",
   "license": "ISC",
@@ -37,7 +35,6 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "2.2.3",
     "eslint-plugin-react": "6.4.1",
-    "husky": "^0.13.1",
     "jest": "^18.1.0",
     "nodemon": "^1.11.0"
   },
