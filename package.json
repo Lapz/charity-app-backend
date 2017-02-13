@@ -7,8 +7,8 @@
     "test": "jest",
     "start": "nodemon ./app/index.js",
     "lint": "eslint ./app --fix",
-    "prepush":"npm test",
-    "precommit": "npm-test"
+    "prepush":"yarn test",
+    "precommit": "yarn lint"
   },
   "author": "Lenard Pratt",
   "license": "ISC",
