@@ -23,18 +23,18 @@ const Account = require('./models/account');
 
 app.use(morgan('dev'));
 app.use(cookieparser());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 // app.use(corser.create()) ============== Passport config ============
 
 const opts = {
   secretOrKey: process.env.JWT_SECRET,
-  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  jwtFromRequest: ExtractJwt.fromAuthHeader()
 };
 
 passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
   Account.findOne({
-    id: jwtPayload.id,
+    id: jwtPayload.id
   }, (err, user) => {
     if (err) {
       return done(err, false);
@@ -76,19 +76,19 @@ app.use((req, res, next) => { //
 const posts = require('./routes/posts.js');
 const imgs = require('./routes/imgs.js');
 const auth = require('./routes/auth.js');
-const test = require('./routes/test.js');
+const ping = require('./routes/ping.js');
 
-app.use('/api', checkAuth, posts, imgs, test);
+app.use('/api', checkAuth, posts, imgs, ping);
 app.use('/auth', auth);
 
 // 404: Not found
 app.use((req, res, next) => {
-  res.json({ ERROR: 'Page not found.' });
+  res.json({ERROR: 'Page not found.'});
 });
 
 // 500: Error reporing
 app.use((err, req, res, next) => {
-  res.json({ ERROR: 'Internal server error.' });
+  res.json({ERROR: 'Internal server error.'});
 });
 
 app.listen(port);
