@@ -5,7 +5,7 @@ to get started:
 ```
 #!javascript
 
-git clone git@bitbucket.org:Lapz27/charity-api.git
+git clone git@github.com:Lapz/charity-api.git
 
 npm install 
 
